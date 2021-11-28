@@ -13,7 +13,7 @@ async function refreshAccessToken(token) {
     return {
       ...token,
       accessToken: refreshedToken.access_token,
-      accessTokenExpires: Date.now + refreshToken.expires_in * 1000,
+      accessTokenExpires: Date.now + refreshedToken.expires_in * 1000,
       refreshToken: refreshedToken.refresh_token ?? token.refreshToken,
     };
   } catch (error) {
@@ -36,19 +36,20 @@ export default NextAuth({
     }),
     // ...add more providers here
   ],
-  secret: process.env.JWT_SECRET,
+  // secret: process.env.JWT_SECRET,
   pages: {
     signIn: "/login",
   },
   callbacks: {
     async jwt({ token, account, user }) {
+      // initial signIn
       if (account && user) {
         return {
           ...token,
           accessToken: account.access_token,
           refreshToken: account.refresh_token,
           username: account.providerAccountId,
-          accessTokenExpires: account.expires_in * 1000,
+          accessTokenExpires: account.expires_at * 1000,
         };
       }
 
