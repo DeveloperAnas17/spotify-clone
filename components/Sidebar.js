@@ -8,13 +8,15 @@ import {
 } from "@heroicons/react/outline";
 import { signOut, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
+import { useRecoilState } from "recoil";
+import { playlistIdState } from "../atoms/playlistAtom";
 import useSpotify from "../hooks/useSpotify";
 
 function Sidebar() {
   const spotifyApi = useSpotify();
   const { data: session, status } = useSession();
   const [playlists, setPlaylists] = useState([]);
-  const [playlistsId, setPlaylistsId] = useState(null);
+  const [playlistsId, setPlaylistsId] = useRecoilState(playlistIdState);
 
   console.log("You clicked >>>>", playlistsId);
 
@@ -61,6 +63,8 @@ function Sidebar() {
           <RssIcon className="h-5 w-5" />
           <p>Your Episode</p>
         </button>
+
+        <hr className="border-t-[0.1px] border-gray-900" />
 
         {/* playlists... */}
         {playlists.map((playlist) => (
